@@ -1,4 +1,4 @@
-# Login-Page-With-Flask-HTML
-A basic login page using html and flask
+# Publisher Container
+Webhook para adicionar mensagens da wppconnect na fila do RabbitMQ.
 
 
