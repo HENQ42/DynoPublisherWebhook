@@ -3,7 +3,7 @@ import json
 import time
 import os
 from functools import wraps
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, abort
 from flask_cors import CORS  # Import the CORS extension
 
 # Cria uma instância do Flask
@@ -18,6 +18,10 @@ VALID_TOKEN = str(os.environ.get('VALID_TOKEN_VICENT'))
 
 # Acessa a variável de ambiente CLODUAMQP_URL e faz o parse (fallback para localhost)
 url = os.environ.get('CLOUDAMQP_URL', 'amqp://guest:guest@localhost:5672/%2f')
+
+def get_allowed_ips():
+    allowed_ips = os.getenv('ALLOWED_IPS')
+    return allowed_ips.split(',')
 
 def setup_rabbitmq(channel):
     # Declara a exchange
@@ -46,6 +50,11 @@ def validar_token(f):
 @app.route('/webhook', methods=['POST', 'GET'])
 @validar_token
 def webhook():
+
+    allowed_ips = get_allowed_ips()
+    if request.remote_addr not in allowed_ips:
+        abort(403)
+
     body = request.get_json()
 
     if body.get('event') in ("onmessage", "onlogout"):
