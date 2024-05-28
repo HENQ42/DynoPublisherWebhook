@@ -41,6 +41,8 @@ setup_rabbitmq(channel)
 def webhook():
 
     allowed_ips = get_allowed_ips()
+    print('ips permitidos: ', allowed_ips)
+    print('ip da requisição: ', request.remote_addr)
     if request.remote_addr not in allowed_ips:
         abort(403)
 
