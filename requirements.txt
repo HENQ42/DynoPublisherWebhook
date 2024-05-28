@@ -1,0 +1,4 @@
+pika
+flask
+flask_cors
+gunicorn
