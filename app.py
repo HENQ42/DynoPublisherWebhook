@@ -34,17 +34,17 @@ channel = connection.channel()
 # Configura a exchange, fila e binding
 setup_rabbitmq(channel)
 
-def validar_token(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        token = request.headers.get('Authorization')
-        if not token or token != f"Bearer {VALID_TOKEN}":
-            return jsonify({"message": "Token inválido"}), 401
-        return f(*args, **kwargs)
-    return decorated_function
+#def validar_token(f):
+#    @wraps(f)
+#    def decorated_function(*args, **kwargs):
+#        token = request.headers.get('Authorization')
+#        if not token or token != f"Bearer {VALID_TOKEN}":
+#            return jsonify({"message": "Token inválido"}), 401
+#        return f(*args, **kwargs)
+#    return decorated_function
 
 @app.route('/webhook', methods=['POST', 'GET'])
-@validar_token
+#@validar_token
 def webhook():
     body = request.get_json()
 
