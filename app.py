@@ -43,7 +43,7 @@ def validar_token(f):
         return f(*args, **kwargs)
     return decorated_function
 
-@app.route('/webhook', methods=['POST'])
+@app.route('/webhook', methods=['POST', 'GET'])
 @validar_token
 def webhook():
     body = request.get_json()
