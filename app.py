@@ -13,14 +13,9 @@ CORS(app)
 EXCHANGE_NAME = 'wppconnect'
 QUEUE_NAME = 'chatbot-vicent'
 ROUTING_KEY = ''
-VALID_TOKEN = str(os.environ.get('VALID_TOKEN_VICENT'))
 
 # Acessa a variável de ambiente CLODUAMQP_URL e faz o parse (fallback para localhost)
 url = os.environ.get('CLOUDAMQP_URL', 'amqp://guest:guest@localhost:5672/%2f')
-
-def get_allowed_ips():
-    allowed_ips = os.getenv('ALLOWED_IPS')
-    return allowed_ips.split(',')
 
 def setup_rabbitmq(channel):
     # Declara a exchange
@@ -39,13 +34,6 @@ setup_rabbitmq(channel)
 
 @app.route('/webhook', methods=['POST', 'GET'])
 def webhook():
-
-    allowed_ips = get_allowed_ips()
-    print('ips permitidos: ', allowed_ips)
-    print('ip da requisição: ', request.remote_addr)
-    if request.remote_addr not in allowed_ips:
-        abort(403)
-
     body = request.get_json()
 
     if body.get('event') in ("onmessage", "onlogout"):
